@@ -3,12 +3,11 @@ Created on Oct 27, 2014
 
 @author: Richard
 '''
-import pygame, game, tgame
+import pygame, game
 from tgame import MainState
 
 def main():
     game.initialize()
-    tgame.initialize()
     main_loop(MainState())
     return
 

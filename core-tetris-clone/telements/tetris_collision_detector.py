@@ -4,11 +4,10 @@ Created on Mar 6, 2016
 @author: Richard
 '''
 from elements import GridRectCollisionDetector, ElementCollection, GridBoundaryElement
-from tgame import grid_camera
 
 class TetrisCollisionDetector(GridRectCollisionDetector, ElementCollection):
-    def __init__(self):
-        GridRectCollisionDetector.__init__(self, grid_rect=grid_camera(), grid_elements=[])
+    def __init__(self, grid_camera=None):
+        GridRectCollisionDetector.__init__(self, grid_rect=grid_camera, grid_elements=[])
         ElementCollection.__init__(self, subelements=[])
         self.initialize_boundary()
         return
@@ -33,7 +32,7 @@ class TetrisCollisionDetector(GridRectCollisionDetector, ElementCollection):
         return
     
     def initialize_boundary(self):
-        self.boundary = GridBoundaryElement(grid_camera=grid_camera())
+        self.boundary = GridBoundaryElement(grid_camera=self.grid_rect)
         self.add_element(self.boundary)
         return
     

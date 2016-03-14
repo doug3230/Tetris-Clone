@@ -21,6 +21,8 @@ class MainState(StateSystem):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_n:
                 self.new_game()
+            elif event.key == pygame.K_p:
+                self.pause_game()
             elif event.key == pygame.K_r:
                 self.resume_game()
             elif event.key == pygame.K_i:
@@ -35,6 +37,13 @@ class MainState(StateSystem):
     
     def resume_game(self):
         self.child_state = self.game_state
+        self.game_state.unpause()
+        self.refresh_screen = True
+        return
+    
+    def pause_game(self):
+        self.child_state = self.game_state
+        self.game_state.pause()
         self.refresh_screen = True
         return
     

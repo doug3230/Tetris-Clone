@@ -8,13 +8,15 @@ from elements import ElementCollection, GridElement
 from coloured_tile import init_ctile_at
 
 class Tetromino(GridElement):
-    def __init__(self, colour=BLACK, tile_positions=tuple()):
+    def __init__(self, colour=BLACK, grid_camera=None, tile_positions=tuple()):
         GridElement.__init__(self, element=ElementCollection(),
-                             grid_position=TetrominoPosition())
+                             grid_position=TetrominoPosition(),
+                             grid_camera=grid_camera)
         self.old_tile_positions = None
         self.tile_positions = tile_positions
         self.mapping = {}
         self.colour = colour
+        self.reset_position_mapping()
         return
     
     def get_tiles(self):
@@ -39,19 +41,21 @@ class Tetromino(GridElement):
         for position in self.tile_positions:
             tile = init_ctile_at(x=x + position[0],
                                 y=y + position[1],
-                                colour=self.colour)
+                                colour=self.colour,
+                                grid_camera=self.grid_camera)
             self.mapping[position] = tile
             self.element.add_element(tile)
         return
     
     def update(self):
+        self.element.rect = self.grid_camera.rect
         if self.tile_positions != self.grid_position.tile_positions:
             self.refresh()
             self.reset_position_mapping()
-            self.grid_position.tile_positions = self.tile_positions
         for position in self.mapping.keys():
             tile = self.mapping[position]
             tile.colour = self.colour
+            tile.grid_camera = self.grid_camera
             tile.grid_position.x = self.grid_position.x + position[0]
             tile.grid_position.y = self.grid_position.y + position[1]
         GridElement.update(self)
@@ -82,8 +86,8 @@ class TetrominoPosition(GridPosition):
         return tuple((self.x + position[0], self.y + position[1]) \
                      for position in rot_positions)
 
-def init_tetromino_at(classname=Tetromino, x=0, y=0):
-    tetromino = classname()
+def init_tetromino_at(classname=Tetromino, x=0, y=0, grid_camera=None):
+    tetromino = classname(grid_camera=grid_camera)
     tetromino.grid_position.x = x
     tetromino.grid_position.y = y
     return tetromino
