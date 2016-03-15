@@ -53,7 +53,7 @@ class GameState(SubState):
         y = top_middle[1]
         instance = init_tetromino_at(classname=classname, x=x, y=y,
                                      grid_camera=self.grid_camera)
-        self.reset_next_fall_time()
+        instance.rotate_randomly()
         return instance
     
     def add_next_piece(self):
@@ -63,6 +63,7 @@ class GameState(SubState):
         self.current_piece.update()
         self.game_over = not self.can_move_current_piece(0, 1)
         self.score_board.set_next_tetromino(self.next_piece)
+        self.reset_next_fall_time()
         return
     
     def move_current_piece(self, x, y):
@@ -139,5 +140,6 @@ class GameState(SubState):
                 self.convert_piece_to_tiles()
                 self.add_next_piece()
             self.reset_next_fall_time()
+        self.score_board.game_over = self.game_over
         SubState.update(self)
         return

@@ -6,6 +6,8 @@ Created on Mar 5, 2016
 from constants import BLACK
 from elements import ElementCollection, GridElement
 from coloured_tile import init_ctile_at
+from tcustomization import MAX_RANDOM_ROTATIONS
+from random import randint
 
 class Tetromino(GridElement):
     def __init__(self, colour=BLACK, grid_camera=None, tile_positions=tuple()):
@@ -30,6 +32,12 @@ class Tetromino(GridElement):
         self.tile_positions = tuple((-min_x + position[0], -min_y + position[1]) \
                                     for position in self.tile_positions)
         self.reset_position_mapping()
+        return
+    
+    def rotate_randomly(self):
+        rotations = randint(0, MAX_RANDOM_ROTATIONS)
+        for i in range(rotations):
+            self.rotate()
         return
     
     def reset_position_mapping(self):
